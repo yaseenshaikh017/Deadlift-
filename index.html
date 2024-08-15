@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RepSync</title>
+    <style>
+        /* Reset some default styles */
+        body, h1, h2, p, div, img {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Main body styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1e1e1e, #333);
+            color: #ffffff;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Header styling with glow effect */
+        h1 {
+            font-size: 3rem;
+            color: #00e5ff;
+            margin-bottom: 20px;
+            animation: glow 1.5s ease-in-out infinite alternate, fadeInDown 1s ease-in-out;
+        }
+
+        /* Glow effect animation */
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #00e5ff, 0 0 20px #00e5ff, 0 0 30px #00e5ff, 0 0 40px #00e5ff, 0 0 50px #00e5ff, 0 0 60px #00e5ff, 0 0 70px #00e5ff;
+            }
+            to {
+                text-shadow: 0 0 20px #00e5ff, 0 0 30px #00e5ff, 0 0 40px #00e5ff, 0 0 50px #00e5ff, 0 0 60px #00e5ff, 0 0 70px #00e5ff, 0 0 80px #00e5ff;
+            }
+        }
+
+        /* Statistics container */
+        .stats {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        /* Individual stat box with pulse effect */
+        .stat {
+            margin: 0 20px;
+            background: rgba(30, 30, 30, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .stat:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #ff4081;
+            text-transform: uppercase;
+            animation: fadeInLeft 1.5s ease-in-out;
+        }
+
+        p {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-top: 5px;
+            animation: fadeInRight 1.5s ease-in-out;
+        }
+
+        /* Video feed styling with rotation and zoom effects */
+        img {
+            width: 720px;
+            height: 480px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.3);
+            animation: rotateZoomIn 2s ease-in-out;
+        }
+
+        /* Fade in animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes rotateZoomIn {
+            from { opacity: 0; transform: rotate(-5deg) scale(0.8); }
+            to { opacity: 1; transform: rotate(0deg) scale(1); }
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function fetchData() {
+            $.ajax({
+                url: '/update_data',
+                type: 'GET',
+                success: function(data) {
+                    $('#stage').text(data.stage);
+                    $('#counter').text(data.counter);
+                    $('#prob').text(data.prob);
+                }
+            });
+        }
+
+        setInterval(fetchData, 500);  // Fetch every 500ms
+    </script>
+</head>
+<body>
+    <h1>RepSync</h1>
+    <div class="stats">
+        <div class="stat">
+            <h2>Stage</h2>
+            <p id="stage">0</p>
+        </div>
+        <div class="stat">
+            <h2>Reps</h2>
+            <p id="counter">0</p>
+        </div>
+        <div class="stat">
+            <h2>Prob</h2>
+            <p id="prob">0.00</p>
+        </div>
+    </div>
+    <img src="{{ url_for('video_feed') }}" alt="Video Feed">
+</body>
+</html>
